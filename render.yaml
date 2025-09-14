@@ -16,7 +16,11 @@ services:
   - type: static
     name: aisec-frontend
     plan: free
-    buildCommand: cd frontend && npm install && npm run build
+    buildCommand: |
+     cd frontend
+     npm install
+     npm audit fix --force
+     npm run build
       
     publishDir: ./frontend/build
     envVars:
