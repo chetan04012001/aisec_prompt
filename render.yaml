@@ -3,8 +3,8 @@ services:
     name: aisec-backend
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && gunicorn app:app
     envVars:
       - key: CEREBRAS_API_KEY
         fromSecret: true
