@@ -11,14 +11,21 @@ from collections import defaultdict
 import qrcode  # Add this import
 import io  # Add this import
 import base64  # Add this import
-
+import gunicorn
 # Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
 
 # Enable CORS for all /api/* routes
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# CORS(app, resources={r"/api/*": {"origins": "*"}})# Replace the CORS configuration with this:
+if os.environ.get('RENDER'):
+    # Production on Render - adjust with your frontend URL
+    frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
+    CORS(app, resources={r"/api/*": {"origins": frontend_url}})
+else:
+    # Local development
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Configuration
 UPLOAD_FOLDER = tempfile.gettempdir()

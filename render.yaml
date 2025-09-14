@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: aisec-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: CEREBRAS_API_KEY
+        fromSecret: true
+      - key: FRONTEND_URL
+        value: https://aisec-frontend.onrender.com
+      - key: PYTHON_VERSION
+        value: 3.9.0
+
+  - type: static
+    name: aisec-frontend
+    plan: free
+    buildCommand: |
+      cd frontend
+      npm install
+      npm run build
+    publishDir: ./frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://aisec-backend.onrender.com

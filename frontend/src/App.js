@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 
 const App = () => {
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  
   const [formData, setFormData] = useState({
     applicationOverview: '',
     numPrompts: 10,
@@ -129,7 +131,7 @@ const App = () => {
     }
     
     try {
-      const response = await fetch('http://localhost:5000/api/generate-prompts', {
+      const response = await fetch(`${API_BASE_URL}/api/generate-prompts`, {
         method: 'POST',
         body: data
       });
@@ -141,7 +143,7 @@ const App = () => {
         setExcelFile(result.excelFile);
         
         if (result.excelFile) {
-          const qrResponse = await fetch(`http://localhost:5000/api/generate-qr/${result.excelFile}`);
+          const qrResponse = await fetch(`${API_BASE_URL}/api/generate-qr/${result.excelFile}`);
           if (qrResponse.ok) {
             const blob = await qrResponse.blob();
             const qrUrl = URL.createObjectURL(blob);
@@ -160,7 +162,7 @@ const App = () => {
 
   const handleDownload = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/download-excel/${excelFile}`);
+      const response = await fetch(`${API_BASE_URL}/api/download-excel/${excelFile}`);
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
