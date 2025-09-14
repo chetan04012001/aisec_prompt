@@ -11,7 +11,7 @@ from collections import defaultdict
 import qrcode  # Add this import
 import io  # Add this import
 import base64  # Add this import
-import gunicorn
+import gunicorn # noqa: F401 - Required for Render deployment
 # Load environment variables from .env file
 load_dotenv()
 
@@ -360,5 +360,7 @@ def too_large(e):
 
 
 if __name__ == '__main__':
-    print("🚀 Starting AI Security Testing Prompt Generator Backend")
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
+    print(f"🚀 Starting AI Security Testing Prompt Generator Backend on port {port}")
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
